@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,9 @@
 		94B259C42673FD8300EC9909 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259C32673FD8300EC9909 /* ContentView.swift */; };
 		94B259C62673FD8400EC9909 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94B259C52673FD8400EC9909 /* Assets.xcassets */; };
 		94B259C92673FD8400EC9909 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94B259C82673FD8400EC9909 /* Preview Assets.xcassets */; };
+		94B259D22673FEF200EC9909 /* Kanji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259D12673FEF200EC9909 /* Kanji.swift */; };
+		94B259D52673FF3C00EC9909 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 94B259D42673FF3C00EC9909 /* SwiftSoup */; };
+		94B259D7267400FB00EC9909 /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259D6267400FB00EC9909 /* Words.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +24,8 @@
 		94B259C82673FD8400EC9909 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		94B259CA2673FD8400EC9909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94B259CB2673FD8400EC9909 /* KanjiSensei.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KanjiSensei.entitlements; sourceTree = "<group>"; };
+		94B259D12673FEF200EC9909 /* Kanji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kanji.swift; sourceTree = "<group>"; };
+		94B259D6267400FB00EC9909 /* Words.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94B259D52673FF3C00EC9909 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +61,8 @@
 			children = (
 				94B259C12673FD8300EC9909 /* KanjiSenseiApp.swift */,
 				94B259C32673FD8300EC9909 /* ContentView.swift */,
+				94B259D6267400FB00EC9909 /* Words.swift */,
+				94B259D12673FEF200EC9909 /* Kanji.swift */,
 				94B259C52673FD8400EC9909 /* Assets.xcassets */,
 				94B259CA2673FD8400EC9909 /* Info.plist */,
 				94B259CB2673FD8400EC9909 /* KanjiSensei.entitlements */,
@@ -87,6 +95,9 @@
 			dependencies = (
 			);
 			name = KanjiSensei;
+			packageProductDependencies = (
+				94B259D42673FF3C00EC9909 /* SwiftSoup */,
+			);
 			productName = KanjiSensei;
 			productReference = 94B259BE2673FD8300EC9909 /* KanjiSensei.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +125,9 @@
 				Base,
 			);
 			mainGroup = 94B259B52673FD8300EC9909;
+			packageReferences = (
+				94B259D32673FF3C00EC9909 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 94B259BF2673FD8300EC9909 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -141,7 +155,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				94B259C42673FD8300EC9909 /* ContentView.swift in Sources */,
+				94B259D7267400FB00EC9909 /* Words.swift in Sources */,
 				94B259C22673FD8300EC9909 /* KanjiSenseiApp.swift in Sources */,
+				94B259D22673FEF200EC9909 /* Kanji.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +345,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		94B259D32673FF3C00EC9909 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		94B259D42673FF3C00EC9909 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94B259D32673FF3C00EC9909 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 94B259B62673FD8300EC9909 /* Project object */;
 }
