@@ -14,6 +14,7 @@
 		94B259D22673FEF200EC9909 /* Kanji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259D12673FEF200EC9909 /* Kanji.swift */; };
 		94B259D52673FF3C00EC9909 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 94B259D42673FF3C00EC9909 /* SwiftSoup */; };
 		94B259D7267400FB00EC9909 /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259D6267400FB00EC9909 /* Words.swift */; };
+		94E70D94267736C100D826F7 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E70D93267736C100D826F7 /* RemoteImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		94B259CB2673FD8400EC9909 /* KanjiSensei.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KanjiSensei.entitlements; sourceTree = "<group>"; };
 		94B259D12673FEF200EC9909 /* Kanji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kanji.swift; sourceTree = "<group>"; };
 		94B259D6267400FB00EC9909 /* Words.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
+		94E70D93267736C100D826F7 /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				94B259C32673FD8300EC9909 /* ContentView.swift */,
 				94B259D6267400FB00EC9909 /* Words.swift */,
 				94B259D12673FEF200EC9909 /* Kanji.swift */,
+				94E70D93267736C100D826F7 /* RemoteImage.swift */,
 				94B259C52673FD8400EC9909 /* Assets.xcassets */,
 				94B259CA2673FD8400EC9909 /* Info.plist */,
 				94B259CB2673FD8400EC9909 /* KanjiSensei.entitlements */,
@@ -157,6 +160,7 @@
 				94B259C42673FD8300EC9909 /* ContentView.swift in Sources */,
 				94B259D7267400FB00EC9909 /* Words.swift in Sources */,
 				94B259C22673FD8300EC9909 /* KanjiSenseiApp.swift in Sources */,
+				94E70D94267736C100D826F7 /* RemoteImage.swift in Sources */,
 				94B259D22673FEF200EC9909 /* Kanji.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

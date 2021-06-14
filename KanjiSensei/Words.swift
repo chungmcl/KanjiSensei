@@ -14,7 +14,7 @@ fileprivate extension CFRange {
     var max: CFIndex { return location + length }
 }
 
-class Token: Codable, Identifiable {
+class Token: Codable, Identifiable, Equatable {
     // START: Stuff for Identifiable
     // Define what it means for two Tokens to be the same
     static func == (lhs: Token, rhs: Token) -> Bool {

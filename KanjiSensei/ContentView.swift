@@ -10,15 +10,21 @@ import SwiftUI
 struct ContentView: View {
     @State private var wordToAdd: String = ""
     @State private var word: Word? = nil
+    @State private var selectedTokenIdx: Int = 0
     
     var body: some View {
         Spacer()
         VStack {
             if (self.word != nil) {
-                HStack{
+                
+                RemoteImage(url: self.word!.tokens[self.selectedTokenIdx].kanji[0].spectrumStrokeOrderDiagramUrl)
+                           .aspectRatio(contentMode: .fit)
+                           .frame(width: 200)
+                
+                HStack {
                     ForEach(word!.tokens, id: \.id) { token in
                         Button(action: {
-                            // Jump to kanji of token
+                            updateSelectedIdx(token: token)
                         }) {
                             VStack {
                                 // Furigana of word token
@@ -43,11 +49,16 @@ struct ContentView: View {
                     }
                 }
             }
+            
             TextField("Word to add...", text: self.$wordToAdd, onCommit: {
                 getWord()
             })
             .frame(width: 500)
         }
+    }
+    
+    private func updateSelectedIdx(token: Token) {
+        self.selectedTokenIdx = self.word!.tokens.firstIndex(of: token)!
     }
     
     private func getWord() {
