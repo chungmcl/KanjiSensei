@@ -68,6 +68,7 @@ class Word: Codable, Identifiable {
     
     public let fullString: String
     public private(set) var tokens: [Token] = [Token]()
+    public private(set) var kanjiTokenIndices: [Int] = [Int]()
     
     init(string: String) throws {
         self.fullString = string
@@ -119,6 +120,11 @@ class Word: Codable, Identifiable {
         }
         let kanji: [Kanji] = Kanji.getKanjiFromPhrase(kanjiPhrase: String(substring))
         self.tokens.append(Token(string: String(substring), range: tokenRange, pronunciation: pronunciation, kanji: kanji))
+        
+        // Load 
+        if (kanji.count > 0) {
+            self.kanjiTokenIndices.append(self.tokens.count - 1)
+        }
     }
     
     private func loadMissingRange(lastPosition: Int, currentRange: CFRange) throws {
