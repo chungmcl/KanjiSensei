@@ -23,7 +23,7 @@ struct ContentView: View {
                 HStack {
                     
                     Button(action: {
-                        prevKanji()
+                        self.prevKanji()
                     }) {
                         ZStack {
                             Rectangle().fill(Color.gray);
@@ -58,7 +58,7 @@ struct ContentView: View {
             }
             
             TextField("Word to add...", text: self.$wordToAdd, onCommit: {
-                getWord()
+                self.getWord()
             })
             .frame(width: 500)
         }
@@ -106,9 +106,11 @@ struct TokensView: View {
     
     var body: some View {
         HStack {
-            ForEach(word!.tokens, id: \.id) { token in
+            ForEach(self.word!.tokens, id: \.id) { token in
                 Button(action: {
-                    goToKanji(token: Token)
+                    self.kanjiOffset = 0
+                    self.selectedTokenIdx = token.parentIdx
+                    self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices.firstIndex(of: token.parentIdx)!
                 }) {
                     VStack {
                         // Furigana of word token
@@ -132,12 +134,6 @@ struct TokensView: View {
                 .disabled(token.kanji.count <= 0);
             }
         }
-    }
-    
-    private func goToKanji(token: Token) {
-        self.kanjiOffset = 0
-        self.selectedTokenIdx = token.parentIdx
-        self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices.firstIndex(of: token.parentIdx)!
     }
 }
 
