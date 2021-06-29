@@ -23,12 +23,14 @@ class Token: Codable, Identifiable, Equatable {
     public private(set) var id = UUID()
     // END: Stuff for Identifiable
     
+    let parentIdx: Int
     let string: String
     let range: Range<Int>
     let pronunciation: String
     let kanji: [Kanji]
     
-    init(string: String, range: Range<Int>, pronunciation: String, kanji: [Kanji]) {
+    init(parentIdx: Int, string: String, range: Range<Int>, pronunciation: String, kanji: [Kanji]) {
+        self.parentIdx = parentIdx
         self.string = string
         self.range = range
         self.pronunciation = pronunciation
@@ -37,7 +39,7 @@ class Token: Codable, Identifiable, Equatable {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-
+        self.parentIdx = try container.decode(Int.self, forKey: .parentIdx)
         self.string = try container.decode(String.self, forKey: .string)
         self.range = try container.decode(Range<Int>.self, forKey: .range)
         self.pronunciation = try container.decode(String.self, forKey: .pronunciation)
@@ -46,6 +48,7 @@ class Token: Codable, Identifiable, Equatable {
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(parentIdx, forKey: .parentIdx)
         try container.encode(string, forKey: .string)
         try container.encode(range, forKey: .range)
         try container.encode(pronunciation, forKey: .pronunciation)
@@ -53,7 +56,7 @@ class Token: Codable, Identifiable, Equatable {
     }
     
     private enum CodingKeys: CodingKey {
-        case string, range, pronunciation, kanji
+        case parentIdx, string, range, pronunciation, kanji
     }
 }
 
@@ -87,13 +90,14 @@ class Word: Codable, Identifiable {
         
         // Scan through the string tokens, appending to result Hiragana transcription and ranges that can't be transcribed.
         var lastPosition: CFIndex = 0
+        var i: Int = 0
         while CFStringTokenizerAdvanceToNextToken(tokenizer) != [] {
             let currentRange: CFRange = CFStringTokenizerGetCurrentTokenRange(tokenizer)
             
             // If currentRange of the text was skipped (unable to tokenize)
             if currentRange.location > lastPosition {
                 do {
-                    try self.loadMissingRange(lastPosition: lastPosition, currentRange: currentRange)
+                    try self.loadMissingRange(i: i, lastPosition: lastPosition, currentRange: currentRange)
                 }
                 catch {
                     
@@ -101,12 +105,13 @@ class Word: Codable, Identifiable {
             }
             
             // Add currentRange to ranges
-            self.loadRangeAndPronunciation(currentRange: currentRange, tokenizer: tokenizer)
+            self.loadRangeAndPronunciation(i: i, currentRange: currentRange, tokenizer: tokenizer)
             lastPosition = currentRange.max
+            i += 1
         }
     }
     
-    public func loadRangeAndPronunciation(currentRange: CFRange, tokenizer: CFStringTokenizer) {
+    public func loadRangeAndPronunciation(i: Int, currentRange: CFRange, tokenizer: CFStringTokenizer) {
         let tokenRange: Range<Int> = currentRange.location ..< currentRange.max
         let substringStartIndex = self.fullString.index(self.fullString.startIndex, offsetBy: currentRange.location)
         let substringEndIndex = self.fullString.index(self.fullString.startIndex, offsetBy: currentRange.max)
@@ -119,7 +124,7 @@ class Word: Codable, Identifiable {
             pronunciation = latin.applyingTransform(.latinToHiragana, reverse: false) ?? "???"
         }
         let kanji: [Kanji] = Kanji.getKanjiFromPhrase(kanjiPhrase: String(substring))
-        self.tokens.append(Token(string: String(substring), range: tokenRange, pronunciation: pronunciation, kanji: kanji))
+        self.tokens.append(Token(parentIdx: i, string: String(substring), range: tokenRange, pronunciation: pronunciation, kanji: kanji))
         
         // Load 
         if (kanji.count > 0) {
@@ -127,7 +132,7 @@ class Word: Codable, Identifiable {
         }
     }
     
-    private func loadMissingRange(lastPosition: Int, currentRange: CFRange) throws {
+    private func loadMissingRange(i: Int, lastPosition: Int, currentRange: CFRange) throws {
         let missingRange = CFRange(location: lastPosition, length: currentRange.location - lastPosition)
         let tokenRange: Range<Int> = missingRange.location ..< missingRange.max
         
@@ -136,7 +141,7 @@ class Word: Codable, Identifiable {
         }
         
         // Use question marks in pronunciationResults for untokenizable parts of wordText
-        self.tokens.append(Token(string: String(substring as Substring), range: tokenRange, pronunciation: "???", kanji: [Kanji]()))
+        self.tokens.append(Token(parentIdx: i, string: String(substring as Substring), range: tokenRange, pronunciation: "???", kanji: [Kanji]()))
     }
     
     enum WordError: Error {

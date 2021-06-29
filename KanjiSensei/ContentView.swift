@@ -12,8 +12,8 @@ struct ContentView: View {
     @State private var wordToAdd: String = ""
     @State private var word: Word? = nil
     
-    @State private var kanjiTokenIndicesIdx: Int = 0
     @State private var selectedTokenIdx: Int = 0
+    @State private var kanjiTokenIndicesIdx: Int = 0
     @State private var kanjiOffset: Int = 0
     
     var body: some View {
@@ -54,7 +54,7 @@ struct ContentView: View {
                     
                     
                 }
-                TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx)
+                TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
             }
             
             TextField("Word to add...", text: self.$wordToAdd, onCommit: {
@@ -101,12 +101,14 @@ struct ContentView: View {
 struct TokensView: View {
     @Binding var word: Word?
     @Binding var selectedTokenIdx: Int
+    @Binding var kanjiTokenIndicesIdx: Int
+    @Binding var kanjiOffset: Int
     
     var body: some View {
         HStack {
             ForEach(word!.tokens, id: \.id) { token in
                 Button(action: {
-                    self.selectedTokenIdx = self.word!.tokens.firstIndex(of: token)!
+                    goToKanji(token: Token)
                 }) {
                     VStack {
                         // Furigana of word token
@@ -130,6 +132,12 @@ struct TokensView: View {
                 .disabled(token.kanji.count <= 0);
             }
         }
+    }
+    
+    private func goToKanji(token: Token) {
+        self.kanjiOffset = 0
+        self.selectedTokenIdx = token.parentIdx
+        self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices.firstIndex(of: token.parentIdx)!
     }
 }
 
