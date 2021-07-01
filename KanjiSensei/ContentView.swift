@@ -90,6 +90,7 @@ struct ContentView: View {
     private func getWord() {
         do {
             self.word = try Word(string: self.wordToAdd)
+            self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices[0]
             self.selectedTokenIdx = self.word!.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
         }
         catch {
