@@ -18,13 +18,14 @@ struct ContentView: View {
                 List {
                     HStack {
                         Text("My Sets")
-                            .font(Font.system(size: 20, weight: .bold, design: .default))
+                            .font(Font.system(size: 25, weight: .bold, design: .default))
                             .foregroundColor(.primary)
                         Spacer()
                         Button(action: {
                             self.addNewSet()
                         }) {
                             Text("New Set")
+                                .foregroundColor(Color.gray)
                                 .padding(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 7)
