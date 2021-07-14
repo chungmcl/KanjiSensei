@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9441C3A62694129600D1C658 /* WordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9441C3A52694129600D1C658 /* WordView.swift */; };
 		94B259C22673FD8300EC9909 /* KanjiSenseiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259C12673FD8300EC9909 /* KanjiSenseiApp.swift */; };
 		94B259C42673FD8300EC9909 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259C32673FD8300EC9909 /* ContentView.swift */; };
 		94B259C62673FD8400EC9909 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94B259C52673FD8400EC9909 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9441C3A52694129600D1C658 /* WordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordView.swift; sourceTree = "<group>"; };
 		94B259BE2673FD8300EC9909 /* KanjiSensei.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KanjiSensei.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94B259C12673FD8300EC9909 /* KanjiSenseiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiSenseiApp.swift; sourceTree = "<group>"; };
 		94B259C32673FD8300EC9909 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			children = (
 				94B259C12673FD8300EC9909 /* KanjiSenseiApp.swift */,
 				94B259C32673FD8300EC9909 /* ContentView.swift */,
+				9441C3A52694129600D1C658 /* WordView.swift */,
 				94B259D6267400FB00EC9909 /* Words.swift */,
 				94B259D12673FEF200EC9909 /* Kanji.swift */,
 				94B259C52673FD8400EC9909 /* Assets.xcassets */,
@@ -162,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94B259C42673FD8300EC9909 /* ContentView.swift in Sources */,
+				9441C3A62694129600D1C658 /* WordView.swift in Sources */,
 				94B259D7267400FB00EC9909 /* Words.swift in Sources */,
 				94B259C22673FD8300EC9909 /* KanjiSenseiApp.swift in Sources */,
 				94B259D22673FEF200EC9909 /* Kanji.swift in Sources */,

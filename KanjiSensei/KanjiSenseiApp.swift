@@ -13,5 +13,8 @@ struct KanjiSenseiApp: App {
         WindowGroup {
             ContentView()
         }
+        .commands {
+            SidebarCommands()
+        }
     }
 }
