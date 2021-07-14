@@ -12,7 +12,10 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            NavigationLink("test", destination: WordView())
+            NavigationLink(destination: WordView()) {
+                Text("Test")
+            }
+            .buttonStyle(PlainButtonStyle())
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
