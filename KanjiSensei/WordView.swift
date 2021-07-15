@@ -8,7 +8,7 @@ import SwiftUI
 import URLImage
 
 struct WordView: View {
-    @State private var wordToAdd: String = ""
+    //@State private var wordToAdd: String = ""
     @State private var word: Word? = nil
     
     @State private var selectedTokenIdx: Int = 0
@@ -56,10 +56,10 @@ struct WordView: View {
                 TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
             }
             
-            TextField("Word to add...", text: self.$wordToAdd, onCommit: {
-                self.getWord()
-            })
-            .frame(width: 500)
+            //TextField("Word to add...", text: self.$wordToAdd, onCommit: {
+            //    self.getWord()
+            //})
+            //.frame(width: 500)
         }
         Spacer()
     }
@@ -86,16 +86,16 @@ struct WordView: View {
         }
     }
     
-    private func getWord() {
-        do {
-            self.word = try Word(string: self.wordToAdd)
-            self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices[0]
-            self.selectedTokenIdx = self.word!.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
-        }
-        catch {
-            print("Fail")
-        }
-    }
+    //private func getWord() {
+    //    do {
+    //        self.word = try Word(string: self.wordToAdd)
+    //        self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices[0]
+    //        self.selectedTokenIdx = self.word!.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
+    //    }
+    //    catch {
+    //        print("Fail")
+    //    }
+    //}
 }
 
 struct TokensView: View {
@@ -136,12 +136,3 @@ struct TokensView: View {
         }
     }
 }
-
-
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
-
