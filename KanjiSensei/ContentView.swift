@@ -9,6 +9,8 @@ import SwiftUI
 import URLImage
 
 struct ContentView: View {
+    @StateObject public var wordSetList: WordSets = WordSetFileManager.appStateWordSets
+    
     
     var body: some View {
         // Navigation takes two "arguments" in { } -- first is sidebar, second is content view. Otherwise, just

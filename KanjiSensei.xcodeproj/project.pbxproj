@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9408EBA826A08D6900FAAF13 /* WordSetFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408EBA726A08D6900FAAF13 /* WordSetFileManager.swift */; };
 		9441C3A62694129600D1C658 /* WordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9441C3A52694129600D1C658 /* WordView.swift */; };
 		94B259C22673FD8300EC9909 /* KanjiSenseiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259C12673FD8300EC9909 /* KanjiSenseiApp.swift */; };
 		94B259C42673FD8300EC9909 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259C32673FD8300EC9909 /* ContentView.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9408EBA726A08D6900FAAF13 /* WordSetFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSetFileManager.swift; sourceTree = "<group>"; };
 		9441C3A52694129600D1C658 /* WordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordView.swift; sourceTree = "<group>"; };
 		94B259BE2673FD8300EC9909 /* KanjiSensei.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KanjiSensei.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94B259C12673FD8300EC9909 /* KanjiSenseiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiSenseiApp.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				9441C3A52694129600D1C658 /* WordView.swift */,
 				94B259D6267400FB00EC9909 /* Words.swift */,
 				94B259D12673FEF200EC9909 /* Kanji.swift */,
+				9408EBA726A08D6900FAAF13 /* WordSetFileManager.swift */,
 				94B259C52673FD8400EC9909 /* Assets.xcassets */,
 				94B259CA2673FD8400EC9909 /* Info.plist */,
 				94B259CB2673FD8400EC9909 /* KanjiSensei.entitlements */,
@@ -164,6 +167,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9408EBA826A08D6900FAAF13 /* WordSetFileManager.swift in Sources */,
 				94B259C42673FD8300EC9909 /* ContentView.swift in Sources */,
 				9441C3A62694129600D1C658 /* WordView.swift in Sources */,
 				94B259D7267400FB00EC9909 /* Words.swift in Sources */,
