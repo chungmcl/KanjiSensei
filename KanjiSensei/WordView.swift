@@ -8,8 +8,7 @@ import SwiftUI
 import URLImage
 
 struct WordView: View {
-    //@State private var wordToAdd: String = ""
-    @State private var word: Word? = nil
+    @State public var word: Word
     
     @State private var selectedTokenIdx: Int = 0
     @State private var kanjiTokenIndicesIdx: Int = 0
@@ -18,48 +17,55 @@ struct WordView: View {
     var body: some View {
         Spacer()
         VStack {
-            if (self.word != nil) {
-                HStack {
-                    
-                    Button(action: {
-                        self.prevKanji()
-                    }) {
-                        ZStack {
-                            Rectangle().fill(Color.gray);
-                            Text(" ← ")
-                                .font(Font.system(size: 20, weight: .light, design: .default));
-                        }
+            TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
+            
+            HStack {
+                Button(action: {
+                    self.prevKanji()
+                }) {
+                    ZStack {
+                        Rectangle().fill(Color.gray);
+                        Text(" ← ")
+                            .font(Font.system(size: 20, weight: .light, design: .default));
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(7)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .frame(width: 40, height: 40)
+                .cornerRadius(7)
+                
+                
+                
+                ZStack {
                     
-                    URLImage(self.word!.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
+                    Rectangle().fill(Color.white)
+                        .cornerRadius(40)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 40)
+                                //.stroke(Color.gray, lineWidth: 4)
+                        )
+                    
+                    URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
                         image.resizable().aspectRatio(contentMode: .fit)
                     }
-                    
-                    Button(action: {
-                        nextKanji()
-                    }) {
-                        ZStack {
-                            Rectangle().fill(Color.gray);
-                            Text(" → ")
-                                .font(Font.system(size: 20, weight: .light, design: .default));
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(7)
-                    
-                    
+                    .frame(width: 500.0, height: 500.0)
+                
                 }
-                TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
+                .frame(width: 500.0, height: 500.0)
+                .cornerRadius(40)
+                
+                Button(action: {
+                    nextKanji()
+                }) {
+                    ZStack {
+                        Rectangle().fill(Color.gray);
+                        Text(" → ")
+                            .font(Font.system(size: 20, weight: .light, design: .default));
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .frame(width: 40, height: 40)
+                .cornerRadius(7)
             }
-            
-            //TextField("Word to add...", text: self.$wordToAdd, onCommit: {
-            //    self.getWord()
-            //})
-            //.frame(width: 500)
         }
         Spacer()
     }
@@ -69,28 +75,28 @@ struct WordView: View {
             self.kanjiOffset -= 1
         }
         else {
-            self.kanjiTokenIndicesIdx = (self.word!.kanjiTokenIndices.count + self.kanjiTokenIndicesIdx - 1) % self.word!.kanjiTokenIndices.count
-            self.selectedTokenIdx = self.word!.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
-            self.kanjiOffset = self.word!.tokens[self.selectedTokenIdx].kanji.count - 1
+            self.kanjiTokenIndicesIdx = (self.word.kanjiTokenIndices.count + self.kanjiTokenIndicesIdx - 1) % self.word.kanjiTokenIndices.count
+            self.selectedTokenIdx = self.word.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
+            self.kanjiOffset = self.word.tokens[self.selectedTokenIdx].kanji.count - 1
         }
     }
     
     private func nextKanji() {
-        if (self.kanjiOffset < self.word!.tokens[self.selectedTokenIdx].kanji.count - 1) {
+        if (self.kanjiOffset < self.word.tokens[self.selectedTokenIdx].kanji.count - 1) {
             self.kanjiOffset += 1
         }
         else {
             self.kanjiOffset = 0
-            self.kanjiTokenIndicesIdx = (self.kanjiTokenIndicesIdx + 1) % self.word!.kanjiTokenIndices.count
-            self.selectedTokenIdx = self.word!.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
+            self.kanjiTokenIndicesIdx = (self.kanjiTokenIndicesIdx + 1) % self.word.kanjiTokenIndices.count
+            self.selectedTokenIdx = self.word.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
         }
     }
     
     //private func getWord() {
     //    do {
     //        self.word = try Word(string: self.wordToAdd)
-    //        self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices[0]
-    //        self.selectedTokenIdx = self.word!.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
+    //        self.kanjiTokenIndicesIdx = self.word.kanjiTokenIndices[0]
+    //        self.selectedTokenIdx = self.word.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
     //    }
     //    catch {
     //        print("Fail")
@@ -99,18 +105,18 @@ struct WordView: View {
 }
 
 struct TokensView: View {
-    @Binding var word: Word?
+    @Binding var word: Word
     @Binding var selectedTokenIdx: Int
     @Binding var kanjiTokenIndicesIdx: Int
     @Binding var kanjiOffset: Int
     
     var body: some View {
         HStack {
-            ForEach(self.word!.tokens, id: \.id) { token in
+            ForEach(self.word.tokens, id: \.id) { token in
                 Button(action: {
                     self.kanjiOffset = 0
                     self.selectedTokenIdx = token.parentIdx
-                    self.kanjiTokenIndicesIdx = self.word!.kanjiTokenIndices.firstIndex(of: token.parentIdx)!
+                    self.kanjiTokenIndicesIdx = self.word.kanjiTokenIndices.firstIndex(of: token.parentIdx)!
                 }) {
                     VStack {
                         // Furigana of word token

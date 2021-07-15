@@ -18,14 +18,16 @@ struct ContentView: View {
         NavigationView {
             List {
                 HStack {
-                    // Use Title bar as a NavigationLink to default view -- janky but don't know what else to do for now
+                    // Use sidebar title as a NavigationLink to default view -- janky but don't know what else to do for now
                     NavigationLink(destination: DefaultView(), tag: self.defaultViewSetID, selection: self.$selectedSet) {
                         Text("My Sets")
                             .font(Font.system(size: 25, weight: .bold, design: .default))
                             .foregroundColor(.primary)
-                    }.disabled(true)
+                    }
+                    .disabled(true)
                     
                     Spacer()
+                    
                     Button(action: {
                         self.addNewSet()
                     }) {
@@ -54,6 +56,7 @@ struct ContentView: View {
                         }
                     }
                 }
+                .onMove(perform: moveWordSet)
                 
             }
             .listStyle(SidebarListStyle())
@@ -69,15 +72,30 @@ struct ContentView: View {
         //}
     }
     
+    private func moveWordSet(from source: IndexSet, to destination: Int) {
+        self.wordSetList.wordSets.move(fromOffsets: source, toOffset: destination)
+    }
+    
     private func addNewSet() {
         self.wordSetList.wordSets.append(WordSet(name: "New Set"))
+        
+        // Janky but don't know how else to fix bug with sidebar title
+        // getting highlighted upon first new set. Can remove without major issue
+        if (self.wordSetList.wordSets.count == 1) {
+            self.selectedSet = self.wordSetList.wordSets.last!.id
+        }
     }
     
     private func deleteSet(setID: UUID) {
         self.wordSetList.wordSets.removeAll { wordSet in
             return wordSet.id == setID
         }
-        self.selectedSet = self.defaultViewSetID
+        if self.wordSetList.wordSets.count > 0 {
+            self.selectedSet = self.wordSetList.wordSets.last!.id
+        }
+        else {
+            self.selectedSet = self.defaultViewSetID
+        }
     }
 }
 
@@ -87,7 +105,7 @@ struct DefaultView: View {
             Spacer()
             HStack {
                 Spacer()
-                Text("こんにちは")
+                Text("勉強しましょう！")
                     .font(Font.system(size: 40, weight: .bold, design: .default))
                     .foregroundColor(.primary)
                 Spacer()

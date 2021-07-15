@@ -73,7 +73,7 @@ class Word: Codable, Identifiable {
     public private(set) var tokens: [Token] = [Token]()
     public private(set) var kanjiTokenIndices: [Int] = [Int]()
     
-    init(string: String) throws {
+    init(string: String) {
         self.fullString = string
         self.loadTokenData()
     }
