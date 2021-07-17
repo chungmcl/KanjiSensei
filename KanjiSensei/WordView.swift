@@ -18,53 +18,53 @@ struct WordView: View {
         Spacer()
         VStack {
             TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
-            
-            HStack {
-                Button(action: {
-                    self.prevKanji()
-                }) {
-                    ZStack {
-                        Rectangle().fill(Color.gray);
-                        Text(" ← ")
-                            .font(Font.system(size: 20, weight: .light, design: .default));
+            // Only try to show stroke order diagram area if the word actually contains kanji
+            if (self.word.kanjiTokenIndices.count > 0) {
+                HStack {
+                    Button(action: {
+                        self.prevKanji()
+                    }) {
+                        ZStack {
+                            Rectangle().fill(Color.gray);
+                            Text(" ← ")
+                                .font(Font.system(size: 20, weight: .light, design: .default));
+                        }
                     }
-                }
-                .buttonStyle(PlainButtonStyle())
-                .frame(width: 40, height: 40)
-                .cornerRadius(7)
-                
-                
-                
-                ZStack {
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(width: 40, height: 40)
+                    .cornerRadius(7)
                     
-                    Rectangle().fill(Color.white)
-                        .cornerRadius(40)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 40)
-                                //.stroke(Color.gray, lineWidth: 4)
-                        )
+                    ZStack {
+                        
+                        Rectangle().fill(Color.white)
+                            .cornerRadius(40)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 40)
+                                    //.stroke(Color.gray, lineWidth: 4)
+                            )
+                        
+                        URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
+                            image.resizable().aspectRatio(contentMode: .fit)
+                        }
+                        .frame(width: 500.0, height: 500.0)
                     
-                    URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
-                        image.resizable().aspectRatio(contentMode: .fit)
                     }
                     .frame(width: 500.0, height: 500.0)
-                
-                }
-                .frame(width: 500.0, height: 500.0)
-                .cornerRadius(40)
-                
-                Button(action: {
-                    nextKanji()
-                }) {
-                    ZStack {
-                        Rectangle().fill(Color.gray);
-                        Text(" → ")
-                            .font(Font.system(size: 20, weight: .light, design: .default));
+                    .cornerRadius(40)
+                    
+                    Button(action: {
+                        nextKanji()
+                    }) {
+                        ZStack {
+                            Rectangle().fill(Color.gray);
+                            Text(" → ")
+                                .font(Font.system(size: 20, weight: .light, design: .default));
+                        }
                     }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(width: 40, height: 40)
+                    .cornerRadius(7)
                 }
-                .buttonStyle(PlainButtonStyle())
-                .frame(width: 40, height: 40)
-                .cornerRadius(7)
             }
         }
         Spacer()
@@ -91,17 +91,6 @@ struct WordView: View {
             self.selectedTokenIdx = self.word.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
         }
     }
-    
-    //private func getWord() {
-    //    do {
-    //        self.word = try Word(string: self.wordToAdd)
-    //        self.kanjiTokenIndicesIdx = self.word.kanjiTokenIndices[0]
-    //        self.selectedTokenIdx = self.word.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
-    //    }
-    //    catch {
-    //        print("Fail")
-    //    }
-    //}
 }
 
 struct TokensView: View {
@@ -119,13 +108,25 @@ struct TokensView: View {
                     self.kanjiTokenIndicesIdx = self.word.kanjiTokenIndices.firstIndex(of: token.parentIdx)!
                 }) {
                     VStack {
-                        // Furigana of word token
-                        Text(token.pronunciation)
-                            .font(
-                                (token.kanji.count > 0) ?
-                                    Font.system(size: 10, weight: .heavy, design: .default) :
-                                    Font.system(size: 10, weight: .ultraLight, design: .default)
-                        )
+                        if (token.kanji.count > 0) {
+                            // Furigana of word token
+                            Text(token.pronunciation)
+                                .font(
+                                    (token.kanji.count > 0) ?
+                                        Font.system(size: 10, weight: .heavy, design: .default) :
+                                        Font.system(size: 10, weight: .ultraLight, design: .default)
+                            )
+                        }
+                        else {
+                            // Empty space with same size as other furigana if token doesn't contain kanji
+                            Text("")
+                                .font(
+                                    (token.kanji.count > 0) ?
+                                        Font.system(size: 10, weight: .heavy, design: .default) :
+                                        Font.system(size: 10, weight: .ultraLight, design: .default)
+                                )
+                        }
+                        
                         // Word token
                         Text(token.string)
                             .font(

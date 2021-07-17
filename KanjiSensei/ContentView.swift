@@ -50,7 +50,7 @@ struct ContentView: View {
                     }
                     .contextMenu {
                         Button {
-                            self.deleteSet(setID: wordSet.id)
+                            self.deleteSet(uuid: wordSet.id)
                         } label: {
                             Text("Delete")
                         }
@@ -86,9 +86,9 @@ struct ContentView: View {
         }
     }
     
-    private func deleteSet(setID: UUID) {
+    private func deleteSet(uuid: UUID) {
         self.wordSetList.wordSets.removeAll { wordSet in
-            return wordSet.id == setID
+            return wordSet.id == uuid
         }
         if self.wordSetList.wordSets.count > 0 {
             self.selectedSet = self.wordSetList.wordSets.last!.id

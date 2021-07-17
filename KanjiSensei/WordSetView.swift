@@ -12,9 +12,8 @@ struct WordSetView: View {
     @ObservedObject public var wordSet: WordSet
     
     @State private var wordToAdd: String = ""
-    @State private var selectedWord: Word? = nil
     
-    @State private var test: String? = nil
+    @State private var selectedWord: UUID? = nil
     
     var body: some View {
         VStack {
@@ -31,7 +30,9 @@ struct WordSetView: View {
             NavigationView {
                 VStack {
                     HStack {
-                        TextField("Add new word...", text: self.$wordToAdd)
+                        TextField("Add new word...", text: self.$wordToAdd, onCommit: {
+                            self.addNewWord()
+                        })
                         Button(action: {
                             self.addNewWord()
                         }) {
@@ -41,9 +42,15 @@ struct WordSetView: View {
                     
                     List {
                         ForEach(wordSet.set, id: \.id) { word in
-                            
-                            NavigationLink(destination: WordView(word: word), tag: "lol", selection: self.$test) {
+                            NavigationLink(destination: WordView(word: word), tag: word.id, selection: self.$selectedWord) {
                                 Text(word.fullString)
+                            }
+                            .contextMenu {
+                                Button {
+                                    self.deleteWord(uuid: word.id)
+                                } label: {
+                                    Text("Delete")
+                                }
                             }
                         }
                         .onMove(perform: moveWord)
@@ -66,6 +73,13 @@ struct WordSetView: View {
         self.wordToAdd = self.wordToAdd.trimmingCharacters(in: .whitespacesAndNewlines)
         if (!self.wordToAdd.isEmpty) {
             self.wordSet.set.append(Word(string: self.wordToAdd))
+        }
+        self.wordToAdd = ""
+    }
+    
+    private func deleteWord(uuid: UUID) {
+        self.wordSet.set.removeAll { word in
+            return word.id == uuid
         }
     }
     
