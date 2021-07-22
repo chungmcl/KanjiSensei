@@ -73,6 +73,7 @@ struct WordSetView: View {
         self.wordToAdd = self.wordToAdd.trimmingCharacters(in: .whitespacesAndNewlines)
         if (!self.wordToAdd.isEmpty) {
             self.wordSet.set.append(Word(string: self.wordToAdd))
+            WordSetFileManager.saveWordSets()
         }
         self.wordToAdd = ""
     }

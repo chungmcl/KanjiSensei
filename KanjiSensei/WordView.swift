@@ -8,11 +8,24 @@ import SwiftUI
 import URLImage
 
 struct WordView: View {
-    @State public var word: Word
+    @State private var word: Word
+    @State private var selectedTokenIdx: Int
+    @State private var kanjiTokenIndicesIdx: Int
+    @State private var kanjiOffset: Int
     
-    @State private var selectedTokenIdx: Int = 0
-    @State private var kanjiTokenIndicesIdx: Int = 0
-    @State private var kanjiOffset: Int = 0
+    init(word: Word) {
+        self.word = word
+        if (word.kanjiTokenIndices.count > 0) {
+            self.selectedTokenIdx = word.kanjiTokenIndices.first!
+            self.kanjiTokenIndicesIdx = 0
+            self.kanjiOffset = 0
+        }
+        else {
+            self.selectedTokenIdx = -1
+            self.kanjiTokenIndicesIdx = -1
+            self.kanjiOffset = -1
+        }
+    }
     
     var body: some View {
         Spacer()
@@ -43,11 +56,14 @@ struct WordView: View {
                                     //.stroke(Color.gray, lineWidth: 4)
                             )
                         
+                                                
                         URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
                             image.resizable().aspectRatio(contentMode: .fit)
                         }
                         .frame(width: 500.0, height: 500.0)
-                    
+                        
+                        VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
+                        HLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
                     }
                     .frame(width: 500.0, height: 500.0)
                     .cornerRadius(40)
@@ -94,10 +110,10 @@ struct WordView: View {
 }
 
 struct TokensView: View {
-    @Binding var word: Word
-    @Binding var selectedTokenIdx: Int
-    @Binding var kanjiTokenIndicesIdx: Int
-    @Binding var kanjiOffset: Int
+    @Binding public var word: Word
+    @Binding public var selectedTokenIdx: Int
+    @Binding public var kanjiTokenIndicesIdx: Int
+    @Binding public var kanjiOffset: Int
     
     var body: some View {
         HStack {
@@ -143,3 +159,24 @@ struct TokensView: View {
         }
     }
 }
+
+// Credit for line code to @kazi.munshimun and @Nikaaner on StackOverflow
+// Original post: https://stackoverflow.com/questions/58526632/swiftui-create-a-single-dashed-line-with-swiftui
+struct VLine: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        }
+    }
+}
+
+struct HLine: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        }
+    }
+}
+
