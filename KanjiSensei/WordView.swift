@@ -29,60 +29,65 @@ struct WordView: View {
     
     var body: some View {
         Spacer()
-        VStack {
-            TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
-            // Only try to show stroke order diagram area if the word actually contains kanji
-            if (self.word.kanjiTokenIndices.count > 0) {
-                HStack {
-                    Button(action: {
-                        self.prevKanji()
-                    }) {
-                        ZStack {
-                            Rectangle().fill(Color.gray);
-                            Text(" ← ")
-                                .font(Font.system(size: 20, weight: .light, design: .default));
+        HStack {
+            VStack {
+                TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
+                // Only try to show stroke order diagram area if the word actually contains kanji
+                if (self.word.kanjiTokenIndices.count > 0) {
+                    HStack {
+                        Button(action: {
+                            self.prevKanji()
+                        }) {
+                            ZStack {
+                                Rectangle().fill(Color.gray);
+                                Text(" ← ")
+                                    .font(Font.system(size: 20, weight: .light, design: .default));
+                            }
                         }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(7)
-                    
-                    ZStack {
+                        .buttonStyle(PlainButtonStyle())
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(7)
                         
-                        Rectangle().fill(Color.white)
-                            .cornerRadius(40)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    //.stroke(Color.gray, lineWidth: 4)
-                            )
-                        
-                                                
-                        URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
-                            image.resizable().aspectRatio(contentMode: .fit)
+                        ZStack {
+                            
+                            Rectangle().fill(Color.white)
+                                .cornerRadius(40)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 40)
+                                        //.stroke(Color.gray, lineWidth: 4)
+                                )
+                            
+                                                    
+                            URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
+                                image.resizable().aspectRatio(contentMode: .fit)
+                            }
+                            .frame(width: 500.0, height: 500.0)
+                            
+                            VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
+                            HLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
                         }
                         .frame(width: 500.0, height: 500.0)
+                        .cornerRadius(40)
                         
-                        VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
-                        HLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
-                    }
-                    .frame(width: 500.0, height: 500.0)
-                    .cornerRadius(40)
-                    
-                    Button(action: {
-                        nextKanji()
-                    }) {
-                        ZStack {
-                            Rectangle().fill(Color.gray);
-                            Text(" → ")
-                                .font(Font.system(size: 20, weight: .light, design: .default));
+                        Button(action: {
+                            nextKanji()
+                        }) {
+                            ZStack {
+                                Rectangle().fill(Color.gray);
+                                Text(" → ")
+                                    .font(Font.system(size: 20, weight: .light, design: .default));
+                            }
                         }
+                        .buttonStyle(PlainButtonStyle())
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(7)
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(7)
                 }
             }
+            
+            KanjiInfoView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
         }
+        
         Spacer()
     }
     
@@ -106,6 +111,37 @@ struct WordView: View {
             self.kanjiTokenIndicesIdx = (self.kanjiTokenIndicesIdx + 1) % self.word.kanjiTokenIndices.count
             self.selectedTokenIdx = self.word.kanjiTokenIndices[self.kanjiTokenIndicesIdx]
         }
+    }
+}
+
+struct KanjiInfoView: View {
+    @Binding public var word: Word
+    @Binding public var selectedTokenIdx: Int
+    @Binding public var kanjiTokenIndicesIdx: Int
+    @Binding public var kanjiOffset: Int
+    
+    private var selectedKanji: Kanji { return self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset] }
+    
+    var body: some View {
+        VStack {
+            Text(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].kanji)
+            Text("Kunyomi: \(self.stringListToCommaString(stringList: self.selectedKanji.kunyomi))")
+            Text("Onyomi: \(self.stringListToCommaString(stringList: self.selectedKanji.onyomi))")
+        }.overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(Color.gray, lineWidth: 1)
+        )
+    }
+    
+    private func stringListToCommaString(stringList: [String]) -> String {
+        var commaString: String = ""
+        for i in 0 ..< stringList.count - 1 {
+            commaString += "\(stringList[i]), "
+        }
+        if stringList.count > 0 {
+            commaString += stringList.last!
+        }
+        return commaString
     }
 }
 
