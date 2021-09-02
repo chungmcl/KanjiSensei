@@ -29,7 +29,7 @@ struct WordView: View {
     
     var body: some View {
         Spacer()
-        HStack {
+        HStack(alignment: .bottom) {
             VStack {
                 TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
                 // Only try to show stroke order diagram area if the word actually contains kanji
@@ -85,7 +85,9 @@ struct WordView: View {
                 }
             }
             
-            KanjiInfoView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
+            if (self.word.kanjiTokenIndices.count > 0) {
+                KanjiInfoView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
+            }
         }
         
         Spacer()
@@ -123,20 +125,40 @@ struct KanjiInfoView: View {
     private var selectedKanji: Kanji { return self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset] }
     
     var body: some View {
-        VStack {
-            Text(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].kanji)
-            Text("Kunyomi: \(self.stringListToCommaString(stringList: self.selectedKanji.kunyomi))")
-            Text("Onyomi: \(self.stringListToCommaString(stringList: self.selectedKanji.onyomi))")
-        }.overlay(
-            RoundedRectangle(cornerRadius: 7)
-                .stroke(Color.gray, lineWidth: 1)
-        )
+        VStack(alignment: .center, spacing: 20) {
+            Text(self.selectedKanji.kanji).font(.system(size: 20, weight: .semibold, design: .default))
+            
+            HStack(alignment: .center, spacing: 30) {
+                VStack {
+                    
+                    Text("Kunyomi").font(.system(size: 20, weight: .semibold, design: .default))
+                    
+                    ForEach(self.selectedKanji.kunyomi, id: \.self) { kunyomi in
+                        Text(kunyomi).font(.system(size: 20, weight: .medium, design: .default))
+                    }
+                    
+                    Spacer()
+                }
+                
+                VStack {
+                    
+                    Text("Onyomi").font(.system(size: 20, weight: .semibold, design: .default))
+                    
+                    ForEach(self.selectedKanji.onyomi, id: \.self) { onyomi in
+                        Text(onyomi).font(.system(size: 20, weight: .medium, design: .default))
+                    }
+                    
+                    Spacer()
+                }
+            }
+            .frame(maxWidth: 400, maxHeight: 550)
+        }
     }
     
     private func stringListToCommaString(stringList: [String]) -> String {
         var commaString: String = ""
         for i in 0 ..< stringList.count - 1 {
-            commaString += "\(stringList[i]), "
+            commaString += "\(stringList[i])、"
         }
         if stringList.count > 0 {
             commaString += stringList.last!
@@ -163,28 +185,25 @@ struct TokensView: View {
                         if (token.kanji.count > 0) {
                             // Furigana of word token
                             Text(token.pronunciation)
-                                .font(
-                                    (token.kanji.count > 0) ?
-                                        Font.system(size: 10, weight: .heavy, design: .default) :
-                                        Font.system(size: 10, weight: .ultraLight, design: .default)
+                                .font((token.kanji.count > 0) ?
+                                Font.system(size: 15, weight: .semibold, design: .default) :
+                                Font.system(size: 15, weight: .ultraLight, design: .default)
                             )
                         }
                         else {
                             // Empty space with same size as other furigana if token doesn't contain kanji
                             Text("")
-                                .font(
-                                    (token.kanji.count > 0) ?
-                                        Font.system(size: 10, weight: .heavy, design: .default) :
-                                        Font.system(size: 10, weight: .ultraLight, design: .default)
-                                )
+                                .font((token.kanji.count > 0) ?
+                                Font.system(size: 15, weight: .semibold, design: .default) :
+                                Font.system(size: 15, weight: .ultraLight, design: .default)
+                            )
                         }
                         
                         // Word token
                         Text(token.string)
-                            .font(
-                                (token.kanji.count > 0) ?
-                                Font.system(size: 30, weight: .heavy, design: .default) :
-                                Font.system(size: 30, weight: .ultraLight, design: .default)
+                            .font((token.kanji.count > 0) ?
+                            Font.system(size: 45, weight: .bold, design: .default) :
+                            Font.system(size: 45, weight: .ultraLight, design: .default)
                         )
                     }
                 }
