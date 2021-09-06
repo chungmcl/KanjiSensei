@@ -29,7 +29,7 @@ struct WordView: View {
     
     var body: some View {
         Spacer()
-        HStack(alignment: .bottom) {
+        HStack(alignment: .bottom, spacing: 30) {
             VStack {
                 TokensView(word: self.$word, selectedTokenIdx: self.$selectedTokenIdx, kanjiTokenIndicesIdx: self.$kanjiTokenIndicesIdx, kanjiOffset: self.$kanjiOffset)
                 // Only try to show stroke order diagram area if the word actually contains kanji
@@ -125,40 +125,47 @@ struct KanjiInfoView: View {
     private var selectedKanji: Kanji { return self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset] }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 20) {
+        VStack(alignment: .leading, spacing: 20) {
             Text(self.selectedKanji.kanji).font(.system(size: 20, weight: .semibold, design: .default))
             
+            Text(self.stringListToCommaString(stringList: self.selectedKanji.meanings)).font(.system(size: 20, weight: .regular, design: .default))
             HStack(alignment: .center, spacing: 30) {
-                VStack {
+                VStack(alignment: .leading) {
                     
-                    Text("Kunyomi").font(.system(size: 20, weight: .semibold, design: .default))
-                    
+                    Text("Kunyomi").font(.system(size: 20, weight: .bold, design: .default))
                     ForEach(self.selectedKanji.kunyomi, id: \.self) { kunyomi in
-                        Text(kunyomi).font(.system(size: 20, weight: .medium, design: .default))
+                        Text(kunyomi).font(.system(size: 20, weight: .regular, design: .default))
                     }
                     
                     Spacer()
                 }
                 
-                VStack {
+                VStack(alignment: .leading) {
                     
-                    Text("Onyomi").font(.system(size: 20, weight: .semibold, design: .default))
+                    Text("Onyomi").font(.system(size: 20, weight: .bold, design: .default))
                     
                     ForEach(self.selectedKanji.onyomi, id: \.self) { onyomi in
-                        Text(onyomi).font(.system(size: 20, weight: .medium, design: .default))
+                        Text(onyomi).font(.system(size: 20, weight: .regular, design: .default))
                     }
                     
                     Spacer()
                 }
+                
+                Spacer()
             }
-            .frame(maxWidth: 400, maxHeight: 550)
         }
+        .frame(maxWidth: 400, maxHeight: 550)
+        //.padding()
+        //.overlay(
+        //    RoundedRectangle(cornerRadius: 7)
+        //        .stroke(Color.gray, lineWidth: 1)
+        //)
     }
     
     private func stringListToCommaString(stringList: [String]) -> String {
         var commaString: String = ""
         for i in 0 ..< stringList.count - 1 {
-            commaString += "\(stringList[i])、"
+            commaString += "\(stringList[i]), "
         }
         if stringList.count > 0 {
             commaString += stringList.last!
