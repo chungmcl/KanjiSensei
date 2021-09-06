@@ -126,10 +126,16 @@ struct KanjiInfoView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text(self.selectedKanji.kanji).font(.system(size: 20, weight: .semibold, design: .default))
+            HStack(spacing: 0) {
+                Text(self.selectedKanji.kanji)
+                ForEach(self.selectedKanji.variants, id: \.self) { variant in
+                    Text(", " + variant)
+                }
+            }
             
             Text(self.stringListToCommaString(stringList: self.selectedKanji.meanings)).font(.system(size: 20, weight: .regular, design: .default))
-            HStack(alignment: .center, spacing: 30) {
+            
+            HStack(alignment: .top, spacing: 30) {
                 VStack(alignment: .leading) {
                     
                     Text("Kunyomi").font(.system(size: 20, weight: .bold, design: .default))
@@ -154,6 +160,7 @@ struct KanjiInfoView: View {
                 Spacer()
             }
         }
+        .font(.system(size: 30, weight: .semibold, design: .default))
         .frame(maxWidth: 400, maxHeight: 550)
         //.padding()
         //.overlay(
@@ -164,10 +171,10 @@ struct KanjiInfoView: View {
     
     private func stringListToCommaString(stringList: [String]) -> String {
         var commaString: String = ""
-        for i in 0 ..< stringList.count - 1 {
-            commaString += "\(stringList[i]), "
-        }
-        if stringList.count > 0 {
+        if (stringList.count > 0) {
+            for i in 0 ..< stringList.count - 1 {
+                commaString += "\(stringList[i]), "
+            }
             commaString += stringList.last!
         }
         return commaString
@@ -216,7 +223,7 @@ struct TokensView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 // Disabled if does not contain a kanji
-                .disabled(token.kanji.count <= 0);
+                .disabled(token.kanji.count <= 0)
             }
         }
     }

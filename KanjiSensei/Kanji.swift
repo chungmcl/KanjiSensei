@@ -14,6 +14,7 @@ class Kanji: Codable {
     public private(set) var kanji: String
     public private(set) var radical: String = "None"
     public private(set) var parts: [String] = [String]()
+    public private(set) var variants: [String] = [String]()
     public private(set) var meanings: [String] = [String]()
     public private(set) var kunyomi: [String] = [String]()
     public private(set) var onyomi: [String] = [String]()
@@ -88,6 +89,7 @@ class Kanji: Codable {
         self.kanji = try container.decode(String.self, forKey: .kanji)
         self.radical = try container.decode(String.self, forKey: .radical)
         self.parts = try container.decode([String].self, forKey: .parts)
+        self.variants = try container.decode([String].self, forKey: .variants)
         self.meanings = try container.decode([String].self, forKey: .meanings)
         self.kunyomi = try container.decode([String].self, forKey: .kunyomi)
         self.onyomi = try container.decode([String].self, forKey: .onyomi)
@@ -104,6 +106,7 @@ class Kanji: Codable {
         try container.encode(kanji, forKey: .kanji)
         try container.encode(radical, forKey: .radical)
         try container.encode(parts, forKey: .parts)
+        try container.encode(variants, forKey: .variants)
         try container.encode(meanings, forKey: .meanings)
         try container.encode(kunyomi, forKey: .kunyomi)
         try container.encode(onyomi, forKey: .onyomi)
@@ -117,6 +120,7 @@ class Kanji: Codable {
         case kanji
         case radical
         case parts
+        case variants
         case meanings
         case kunyomi
         case onyomi
@@ -155,7 +159,7 @@ class Kanji: Codable {
                     for (idx, detailElement) in kanjiDetailElements.enumerated() {
                         let currentKanjiReference: Kanji = kanjiToLoad[idx]
                         
-                        self.getRadicalAndParts(kanjiDetailElement: detailElement, kanjiToLoad: currentKanjiReference)
+                        self.getRadicalPartsVariants(kanjiDetailElement: detailElement, kanjiToLoad: currentKanjiReference)
                         self.getMeanings(kanjiDetailElement: detailElement, kanjiToLoad: currentKanjiReference)
                         self.getKunAndOnYomi(kanjiDetailElement: detailElement, kanjiToLoad: currentKanjiReference)
                     }
@@ -166,26 +170,39 @@ class Kanji: Codable {
             }
         }
         
-        private static func getRadicalAndParts(kanjiDetailElement: Element, kanjiToLoad: Kanji) -> Void {
+        private static func getRadicalPartsVariants(kanjiDetailElement: Element, kanjiToLoad: Kanji) -> Void {
             do {
                 let radicalAndPartDataElements: Elements = try kanjiDetailElement.getElementsByClass("radicals")
-                let dataString: String = try radicalAndPartDataElements.text()
+                let radicalAndPartDataString: String = try radicalAndPartDataElements.text()
                 
                 let radical: String = String (
-                    dataString [
-                        dataString.range(of: "Radical:")!.upperBound ..< dataString.range(of: "Parts:")!.lowerBound
+                    radicalAndPartDataString [
+                        radicalAndPartDataString.range(of: "Radical:")!.upperBound ..< radicalAndPartDataString.range(of: "Parts:")!.lowerBound
                     ]
                 ).trimmingCharacters(in: .whitespacesAndNewlines)
                 
                 let parts: [String] = String (
-                    dataString [
-                        dataString.range(of: "Parts:")!.upperBound ..< dataString.endIndex
+                    radicalAndPartDataString [
+                        radicalAndPartDataString.range(of: "Parts:")!.upperBound ..< radicalAndPartDataString.endIndex
                     ]
                 ).trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: " ")
                 
+                let variantsDataElements: Elements = try kanjiDetailElement.getElementsByClass("dictionary_entry variants")
+                
+                // Not all kanji have variants
+                if (variantsDataElements.count > 0) {
+                    let variantsDataString: String = try variantsDataElements.text()
+                    let variants: [String] = String (
+                        variantsDataString [
+                            variantsDataString.range(of: "Variants:")!.upperBound ..< variantsDataString.endIndex
+                        ]
+                    ).trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: " ")
+                    kanjiToLoad.variants = variants
+                }
+                
                 kanjiToLoad.radical = radical
                 kanjiToLoad.parts = parts
-                
+                // Leave kanjiToLoad.variants as empty list if kanji doesn't contain variants
             }
             catch {
                 print("Error in getRadicalAndParts")

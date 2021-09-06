@@ -14,9 +14,11 @@ class WordSetFileManager {
     private static var encoder: JSONEncoder = { return JSONEncoder() }()
     private static var decoder: JSONDecoder = { return JSONDecoder() }()
     
+    // /Users/chungmcl/Library/Containers/chungmcl.KanjiSensei/Data/wordsets/
     public static var wordSetsPath: String {
         get {
             let directoryString = NSHomeDirectory() + "/wordsets/"
+            print(directoryString)
             do {
                 try FileManager.default.createDirectory(atPath: directoryString, withIntermediateDirectories: true, attributes: nil)
             } catch {
