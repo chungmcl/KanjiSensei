@@ -140,8 +140,8 @@ struct KanjiInfoView: View {
                     
                     Text("Kunyomi").font(.system(size: 20, weight: .bold, design: .default))
                     ForEach(self.selectedKanji.kunyomi, id: \.self) { kunyomi in
-                        Text(kunyomi).font(.system(size: 20, weight: .regular, design: .default))
-                    }
+                        Text(kunyomi)
+                    }.font(.system(size: 20, weight: .regular, design: .default))
                     
                     Spacer()
                 }
@@ -151,8 +151,8 @@ struct KanjiInfoView: View {
                     Text("Onyomi").font(.system(size: 20, weight: .bold, design: .default))
                     
                     ForEach(self.selectedKanji.onyomi, id: \.self) { onyomi in
-                        Text(onyomi).font(.system(size: 20, weight: .regular, design: .default))
-                    }
+                        Text(onyomi)
+                    }.font(.system(size: 20, weight: .regular, design: .default))
                     
                     Spacer()
                 }

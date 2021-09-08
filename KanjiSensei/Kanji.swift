@@ -197,7 +197,11 @@ class Kanji: Codable {
                             variantsDataString.range(of: "Variants:")!.upperBound ..< variantsDataString.endIndex
                         ]
                     ).trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: " ")
-                    kanjiToLoad.variants = variants
+                    // Some kanji are incorrectly given the "Variants" section while not actually containing
+                    // any variants -- e.g. 上 and 下
+                    if (variants[0] != "") {
+                        kanjiToLoad.variants = variants
+                    }
                 }
                 
                 kanjiToLoad.radical = radical

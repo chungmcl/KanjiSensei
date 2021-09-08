@@ -18,7 +18,6 @@ class WordSetFileManager {
     public static var wordSetsPath: String {
         get {
             let directoryString = NSHomeDirectory() + "/wordsets/"
-            print(directoryString)
             do {
                 try FileManager.default.createDirectory(atPath: directoryString, withIntermediateDirectories: true, attributes: nil)
             } catch {
