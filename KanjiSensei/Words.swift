@@ -62,7 +62,6 @@ class Token: Codable, Identifiable, Equatable {
 
 class Word: Codable, Identifiable {
     // START: Stuff for Identifiable
-    // Define what it means for two Words to be the same
     static func == (lhs: Word, rhs: Word) -> Bool {
         return lhs.id == rhs.id
     }
@@ -98,6 +97,7 @@ class Word: Codable, Identifiable {
             if currentRange.location > lastPosition {
                 do {
                     try self.loadMissingRange(i: i, lastPosition: lastPosition, currentRange: currentRange)
+                    i += 1
                 }
                 catch {
                     

@@ -58,13 +58,13 @@ struct WordView: View {
                                 )
                             
                                                     
+                            VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
+                            HLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
+                            
                             URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
                                 image.resizable().aspectRatio(contentMode: .fit)
                             }
                             .frame(width: 500.0, height: 500.0)
-                            
-                            VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
-                            HLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
                         }
                         .frame(width: 500.0, height: 500.0)
                         .cornerRadius(40)
@@ -129,7 +129,15 @@ struct KanjiInfoView: View {
             HStack(spacing: 0) {
                 Text(self.selectedKanji.kanji)
                 ForEach(self.selectedKanji.variants, id: \.self) { variant in
-                    Text(", " + variant)
+                    Text(", ")
+                    Button(action: {
+                        // Semi-hacky but quickest way to get behavior working rn
+                        // More info in changeVariant
+                        self.changeVariant(variant: variant)
+                    }) {
+                        Text(variant.kanji)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
             
@@ -169,6 +177,12 @@ struct KanjiInfoView: View {
         //)
     }
     
+    // Semi-hacky but quickest way to get behavior working rn
+    // Issues: furigana does not generate correctly with variants
+    private func changeVariant(variant: Kanji) {
+        self.word = Word(string: self.word.fullString.replacingOccurrences(of: self.selectedKanji.kanji, with: variant.kanji, options: .literal, range: nil))
+    }
+    
     private func stringListToCommaString(stringList: [String]) -> String {
         var commaString: String = ""
         if (stringList.count > 0) {
@@ -187,8 +201,11 @@ struct TokensView: View {
     @Binding public var kanjiTokenIndicesIdx: Int
     @Binding public var kanjiOffset: Int
     
+    private var selectedKanji: Kanji { return self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset] }
+    
     var body: some View {
-        HStack {
+        // Alignment??
+        HStack(alignment: .top) {
             ForEach(self.word.tokens, id: \.id) { token in
                 Button(action: {
                     self.kanjiOffset = 0
@@ -213,12 +230,20 @@ struct TokensView: View {
                             )
                         }
                         
-                        // Word token
-                        Text(token.string)
-                            .font((token.kanji.count > 0) ?
-                            Font.system(size: 45, weight: .bold, design: .default) :
-                            Font.system(size: 45, weight: .ultraLight, design: .default)
-                        )
+                        VStack(spacing: 0) {
+                            // Word token
+                            Text(token.string)
+                                .font((token.kanji.count > 0) ?
+                                Font.system(size: 45, weight: .bold, design: .default) :
+                                Font.system(size: 45, weight: .ultraLight, design: .default)
+                            )
+                            
+                            if (token.kanji.contains(self.selectedKanji)) {
+                                Circle()
+                                    .fill(Color.white)
+                                    .frame(maxWidth: 4, maxHeight: 4)
+                            }
+                        }
                     }
                 }
                 .buttonStyle(PlainButtonStyle())

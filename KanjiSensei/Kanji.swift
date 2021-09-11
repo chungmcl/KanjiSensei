@@ -10,11 +10,19 @@ import SwiftSoup
 
 fileprivate let serverDomainName: String = "50.35.91.65:6969"
 
-class Kanji: Codable {
+class Kanji: Codable, Hashable {
+    static func == (lhs: Kanji, rhs: Kanji) -> Bool {
+        return lhs === rhs
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.kanji)
+    }
+    
     public private(set) var kanji: String
     public private(set) var radical: String = "None"
     public private(set) var parts: [String] = [String]()
-    public private(set) var variants: [String] = [String]()
+    public private(set) var variants: [Kanji] = [Kanji]()
     public private(set) var meanings: [String] = [String]()
     public private(set) var kunyomi: [String] = [String]()
     public private(set) var onyomi: [String] = [String]()
@@ -89,7 +97,7 @@ class Kanji: Codable {
         self.kanji = try container.decode(String.self, forKey: .kanji)
         self.radical = try container.decode(String.self, forKey: .radical)
         self.parts = try container.decode([String].self, forKey: .parts)
-        self.variants = try container.decode([String].self, forKey: .variants)
+        self.variants = try container.decode([Kanji].self, forKey: .variants)
         self.meanings = try container.decode([String].self, forKey: .meanings)
         self.kunyomi = try container.decode([String].self, forKey: .kunyomi)
         self.onyomi = try container.decode([String].self, forKey: .onyomi)
@@ -200,7 +208,9 @@ class Kanji: Codable {
                     // Some kanji are incorrectly given the "Variants" section while not actually containing
                     // any variants -- e.g. 上 and 下
                     if (variants[0] != "") {
-                        kanjiToLoad.variants = variants
+                        for variant in variants {
+                            kanjiToLoad.variants.append(Kanji(kanji: variant.first!))
+                        }
                     }
                 }
                 
