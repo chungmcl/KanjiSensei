@@ -181,6 +181,8 @@ struct KanjiInfoView: View {
     // Issues: furigana does not generate correctly with variants
     private func changeVariant(variant: Kanji) {
         self.word = Word(string: self.word.fullString.replacingOccurrences(of: self.selectedKanji.kanji, with: variant.kanji, options: .literal, range: nil))
+        self.selectedTokenIdx = 0
+        self.kanjiOffset = 0
     }
     
     private func stringListToCommaString(stringList: [String]) -> String {
