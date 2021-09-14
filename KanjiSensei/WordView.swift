@@ -203,7 +203,9 @@ struct TokensView: View {
     @Binding public var kanjiTokenIndicesIdx: Int
     @Binding public var kanjiOffset: Int
     
-    private var selectedKanji: Kanji { return self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset] }
+    private var selectedKanji: Kanji {
+        return self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset]
+    }
     
     var body: some View {
         // Alignment??
@@ -240,10 +242,14 @@ struct TokensView: View {
                                 Font.system(size: 45, weight: .ultraLight, design: .default)
                             )
                             
-                            if (token.kanji.contains(self.selectedKanji)) {
-                                Circle()
-                                    .fill(Color.white)
-                                    .frame(maxWidth: 4, maxHeight: 4)
+                            // Prevent accessing self.selectedKanji if there
+                            // is no kanji in this word in the first place
+                            if (self.word.kanjiTokenIndices.count > 0) {
+                                if (token.kanji.contains(self.selectedKanji)) {
+                                    Circle()
+                                        .fill(Color.white)
+                                        .frame(maxWidth: 4, maxHeight: 4)
+                                }
                             }
                         }
                     }
