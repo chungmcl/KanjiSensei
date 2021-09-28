@@ -51,6 +51,14 @@ class Kanji: Codable, Hashable {
         }
     }
     
+    public var hanziUrl: URL? {
+        get {
+            return URL(string:
+                    "http://\(serverDomainName)/hanzi/\(self.kanji).png"
+                        .addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)
+        }
+    }
+    
     private init(kanji: Character) {
         self.kanji = String(kanji)
     }

@@ -13,6 +13,7 @@ struct ContentView: View {
     
     @StateObject public var wordSetList: WordSets = WordSetFileManager.appStateWordSets
     @State private var selectedSet: UUID? = nil
+    @State public var hanzi: Bool = false
     
     var body: some View {
         NavigationView {
@@ -44,7 +45,7 @@ struct ContentView: View {
                 
                 ForEach(wordSetList.wordSets, id: \.id) { wordSet in
                     NavigationLink(
-                        destination: WordSetView(wordSetList: wordSetList, wordSet: wordSet),
+                        destination: WordSetView(wordSetList: wordSetList, wordSet: wordSet, hanzi: self.$hanzi),
                         tag: wordSet.id, selection: self.$selectedSet) {
                         Text(wordSet.name)
                     }
@@ -65,11 +66,11 @@ struct ContentView: View {
             
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
-        //.toolbar {
-        //    Button("Button") {
-        //
-        //    }
-        //}
+        .toolbar {
+            Button("Kanji/Hanzi") {
+                self.hanzi.toggle()
+            }
+        }
     }
     
     private func moveWordSet(from source: IndexSet, to destination: Int) {

@@ -10,6 +10,7 @@ import SwiftUI
 struct WordSetView: View {
     @ObservedObject public var wordSetList: WordSets
     @ObservedObject public var wordSet: WordSet
+    @Binding public var hanzi: Bool
     
     @State private var wordToAdd: String = ""
     
@@ -42,7 +43,7 @@ struct WordSetView: View {
                     
                     List {
                         ForEach(wordSet.set, id: \.id) { word in
-                            NavigationLink(destination: WordView(word: word), tag: word.id, selection: self.$selectedWord) {
+                            NavigationLink(destination: WordView(word: word, hanzi: self.$hanzi), tag: word.id, selection: self.$selectedWord) {
                                 Text(word.fullString)
                             }
                             .contextMenu {

@@ -12,8 +12,9 @@ struct WordView: View {
     @State private var selectedTokenIdx: Int
     @State private var kanjiTokenIndicesIdx: Int
     @State private var kanjiOffset: Int
+    @Binding var hanzi: Bool
     
-    init(word: Word) {
+    init(word: Word, hanzi: Binding<Bool>) {
         self.word = word
         if (word.kanjiTokenIndices.count > 0) {
             self.selectedTokenIdx = word.kanjiTokenIndices.first!
@@ -25,6 +26,7 @@ struct WordView: View {
             self.kanjiTokenIndicesIdx = -1
             self.kanjiOffset = -1
         }
+        self._hanzi = hanzi
     }
     
     var body: some View {
@@ -61,10 +63,18 @@ struct WordView: View {
                             VLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
                             HLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
                             
-                            URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
-                                image.resizable().aspectRatio(contentMode: .fit)
+                            if (!hanzi) {
+                                URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
+                                    image.resizable().aspectRatio(contentMode: .fit)
+                                }
+                                .frame(width: 500.0, height: 500.0)
                             }
-                            .frame(width: 500.0, height: 500.0)
+                            else {
+                                URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].hanziUrl!) { image in
+                                    image.resizable().aspectRatio(contentMode: .fit)
+                                }
+                                .frame(width: 500.0, height: 500.0)
+                            }
                         }
                         .frame(width: 500.0, height: 500.0)
                         .cornerRadius(40)
