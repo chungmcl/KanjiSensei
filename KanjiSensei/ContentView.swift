@@ -7,6 +7,7 @@
 
 import SwiftUI
 import URLImage
+import AVFoundation
 
 struct ContentView: View {
     @State private var defaultViewSetID: UUID = UUID()
@@ -115,3 +116,11 @@ struct DefaultView: View {
         }
     }
 }
+
+
+//let utterance = AVSpeechUtterance(string: "你好")
+//utterance.voice = AVSpeechSynthesisVoice(language: "zh-HK")
+//utterance.rate = 0.3
+//
+//let synthesizer = AVSpeechSynthesizer()
+//synthesizer.speak(utterance)

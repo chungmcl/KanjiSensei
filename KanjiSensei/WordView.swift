@@ -185,6 +185,7 @@ struct KanjiInfoView: View {
         //    RoundedRectangle(cornerRadius: 7)
         //        .stroke(Color.gray, lineWidth: 1)
         //)
+        //.textSelection(.enabled)
     }
     
     // Semi-hacky but quickest way to get behavior working rn
