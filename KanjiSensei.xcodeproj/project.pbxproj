@@ -17,8 +17,6 @@
 		94B259D52673FF3C00EC9909 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 94B259D42673FF3C00EC9909 /* SwiftSoup */; };
 		94B259D7267400FB00EC9909 /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B259D6267400FB00EC9909 /* Words.swift */; };
 		94EDDDBF26A098E600B5862C /* WordSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EDDDBE26A098E600B5862C /* WordSetView.swift */; };
-		94FF0E9C26780F0300B47E81 /* URLImageStore in Frameworks */ = {isa = PBXBuildFile; productRef = 94FF0E9B26780F0300B47E81 /* URLImageStore */; };
-		94FF0E9E26780F0300B47E81 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 94FF0E9D26780F0300B47E81 /* URLImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,8 +39,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94FF0E9C26780F0300B47E81 /* URLImageStore in Frameworks */,
-				94FF0E9E26780F0300B47E81 /* URLImage in Frameworks */,
 				94B259D52673FF3C00EC9909 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -110,8 +106,6 @@
 			name = KanjiSensei;
 			packageProductDependencies = (
 				94B259D42673FF3C00EC9909 /* SwiftSoup */,
-				94FF0E9B26780F0300B47E81 /* URLImageStore */,
-				94FF0E9D26780F0300B47E81 /* URLImage */,
 			);
 			productName = KanjiSensei;
 			productReference = 94B259BE2673FD8300EC9909 /* KanjiSensei.app */;
@@ -142,7 +136,6 @@
 			mainGroup = 94B259B52673FD8300EC9909;
 			packageReferences = (
 				94B259D32673FF3C00EC9909 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
-				94FF0E9A26780F0300B47E81 /* XCRemoteSwiftPackageReference "url-image" */,
 			);
 			productRefGroup = 94B259BF2673FD8300EC9909 /* Products */;
 			projectDirPath = "";
@@ -317,7 +310,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_BUNDLE_IDENTIFIER = chungmcl.KanjiSensei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -341,7 +334,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				PRODUCT_BUNDLE_IDENTIFIER = chungmcl.KanjiSensei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -380,14 +373,6 @@
 				minimumVersion = 2.3.2;
 			};
 		};
-		94FF0E9A26780F0300B47E81 /* XCRemoteSwiftPackageReference "url-image" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dmytro-anokhin/url-image.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.1.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -395,16 +380,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 94B259D32673FF3C00EC9909 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
-		};
-		94FF0E9B26780F0300B47E81 /* URLImageStore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 94FF0E9A26780F0300B47E81 /* XCRemoteSwiftPackageReference "url-image" */;
-			productName = URLImageStore;
-		};
-		94FF0E9D26780F0300B47E81 /* URLImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 94FF0E9A26780F0300B47E81 /* XCRemoteSwiftPackageReference "url-image" */;
-			productName = URLImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

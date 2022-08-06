@@ -5,7 +5,6 @@
 //  Created by Micheal Chung on 7/5/21.
 //
 import SwiftUI
-import URLImage
 
 struct WordView: View {
     @State private var word: Word
@@ -64,14 +63,19 @@ struct WordView: View {
                             HLine().stroke(style: StrokeStyle(lineWidth: 1, dash: [5])).foregroundColor(Color.black)
                             
                             if (!hanzi) {
-                                URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
+                                AsyncImage(url: self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].spectrumStrokeOrderDiagramUrl!) { image in
                                     image.resizable().aspectRatio(contentMode: .fit)
+                                } placeholder: {
+                                    ProgressView()
                                 }
                                 .frame(width: 500.0, height: 500.0)
+                                
                             }
                             else {
-                                URLImage(self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].hanziUrl!) { image in
+                                AsyncImage(url: self.word.tokens[self.selectedTokenIdx].kanji[self.kanjiOffset].hanziUrl!) { image in
                                     image.resizable().aspectRatio(contentMode: .fit)
+                                } placeholder: {
+                                    ProgressView()
                                 }
                                 .frame(width: 500.0, height: 500.0)
                             }
@@ -227,47 +231,57 @@ struct TokensView: View {
                     self.selectedTokenIdx = token.parentIdx
                     self.kanjiTokenIndicesIdx = self.word.kanjiTokenIndices.firstIndex(of: token.parentIdx)!
                 }) {
-                    VStack {
-                        if (token.kanji.count > 0) {
-                            // Furigana of word token
-                            Text(token.pronunciation)
-                                .font((token.kanji.count > 0) ?
-                                Font.system(size: 15, weight: .semibold, design: .default) :
-                                Font.system(size: 15, weight: .ultraLight, design: .default)
-                            )
-                        }
-                        else {
-                            // Empty space with same size as other furigana if token doesn't contain kanji
-                            Text("")
-                                .font((token.kanji.count > 0) ?
-                                Font.system(size: 15, weight: .semibold, design: .default) :
-                                Font.system(size: 15, weight: .ultraLight, design: .default)
-                            )
-                        }
-                        
-                        VStack(spacing: 0) {
-                            // Word token
-                            Text(token.string)
-                                .font((token.kanji.count > 0) ?
-                                Font.system(size: 45, weight: .bold, design: .default) :
-                                Font.system(size: 45, weight: .ultraLight, design: .default)
-                            )
-                            
-                            // Prevent accessing self.selectedKanji if there
-                            // is no kanji in this word in the first place
-                            if (self.word.kanjiTokenIndices.count > 0) {
-                                if (token.kanji.contains(self.selectedKanji)) {
-                                    Circle()
-                                        .fill(Color.white)
-                                        .frame(maxWidth: 4, maxHeight: 4)
-                                }
-                            }
-                        }
-                    }
+                    TokenButtonView(word: word, token: token, selectedKanji: selectedKanji)
                 }
                 .buttonStyle(PlainButtonStyle())
                 // Disabled if does not contain a kanji
                 .disabled(token.kanji.count <= 0)
+            }
+        }
+    }
+    
+    struct TokenButtonView: View {
+        var word: Word
+        var token: Token
+        var selectedKanji: Kanji
+        
+        var body: some View {
+            VStack {
+                if (token.kanji.count > 0) {
+                    // Furigana of word token
+                    Text(token.pronunciation)
+                        .font((token.kanji.count > 0) ?
+                        Font.system(size: 15, weight: .semibold, design: .default) :
+                        Font.system(size: 15, weight: .ultraLight, design: .default)
+                    )
+                }
+                else {
+                    // Empty space with same size as other furigana if token doesn't contain kanji
+                    Text("")
+                        .font((token.kanji.count > 0) ?
+                        Font.system(size: 15, weight: .semibold, design: .default) :
+                        Font.system(size: 15, weight: .ultraLight, design: .default)
+                    )
+                }
+                
+                VStack(spacing: 0) {
+                    // Word token
+                    Text(token.string)
+                        .font((token.kanji.count > 0) ?
+                        Font.system(size: 45, weight: .bold, design: .default) :
+                        Font.system(size: 45, weight: .ultraLight, design: .default)
+                    )
+                    
+                    // Prevent accessing self.selectedKanji if there
+                    // is no kanji in this word in the first place
+                    if (self.word.kanjiTokenIndices.count > 0) {
+                        if (token.kanji.contains(self.selectedKanji)) {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(maxWidth: 4, maxHeight: 4)
+                        }
+                    }
+                }
             }
         }
     }
