@@ -8,7 +8,7 @@
 import Foundation
 import SwiftSoup
 
-fileprivate let serverDomainName: String = "50.35.91.65:1313"
+fileprivate let serverDomainName: String = "50.47.234.136:1313"
 
 class Kanji: Codable, Hashable {
     static func == (lhs: Kanji, rhs: Kanji) -> Bool {
